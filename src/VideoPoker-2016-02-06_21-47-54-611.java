@@ -50,7 +50,7 @@ public class VideoPoker {
         }
     }
 
-    public void shuffleAndBet(){    //Anytime there is a shuffle, this implies that the player is betting 1 dollar
+    public void shuffleAndBet(){
         Random r = new Random();
         for(int i = 0; i < deck.length; i++){
             swap(deck, i, r.nextInt(NUMBER_OF_CARDS_IN_DECK));
@@ -58,7 +58,7 @@ public class VideoPoker {
         javaDollars.bet(BET_AMOUNT);
     }
 
-    public void playersCards(){     //Prints the top 5 cards in the deck AKA the player's cards
+    public void playersCards(){
         sortPlayersCards();
         for(int i = 1; i <= NUMBER_OF_CARDS_AT_PLAY; i++){
             System.out.println(i + ") " + cardFace(deck[i - 1]));
@@ -66,13 +66,13 @@ public class VideoPoker {
     }
 
 
-    private String cardFace(int cardIndex){     //Converts the index number of the card to an actual card (i.e. AS for Ace of Spades)
+    private String cardFace(int cardIndex){
         int s = cardIndex % NUMBER_OF_SUITS;
         int r = cardIndex / NUMBER_OF_SUITS;
         return rank[r] + suit[s];
     }
 
-    private static void swap(int[] a, int first, int second){   //Swaps two given cards, used in shuffling
+    private static void swap(int[] a, int first, int second){
         int temp = a[first];
         a[first] = a[second];
         a[second] = temp;
@@ -88,12 +88,6 @@ public class VideoPoker {
         }
         return deckToString;
     }
-
-    /**
-     * Takes the list of cards the player wants to get rid of and replace and replaces them with the
-     * next cards in the deck
-     * @param entry player's input of the list of cards they will like to replace
-     */
 
     public void replace(String entry){
         Scanner s = new Scanner(entry);
@@ -116,10 +110,6 @@ public class VideoPoker {
             }
         }
     }
-
-    /**
-     * Implements insertion sort to sort the player's 5 cards in order
-     */
 
     public static void sortPlayersCards(){
         for(int i = 0; i < NUMBER_OF_CARDS_AT_PLAY - 1; i++){
