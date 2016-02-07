@@ -24,6 +24,7 @@ public class VideoPoker {
     private static final int THREE_OF_A_KIND_PAYOUT = 3;
     private static final int TWO_PAIR_PAYOUT = 2;
     private static final int PAIR_OF_JACKS_OR_BETTER_PAYOUT = 1;
+    private static final int BET_AMOUNT = 1;
 
     public VideoPoker(){
         deck = new int[NUMBER_OF_CARDS_IN_DECK];
@@ -54,7 +55,7 @@ public class VideoPoker {
         for(int i = 0; i < deck.length; i++){
             swap(deck, i, r.nextInt(NUMBER_OF_CARDS_IN_DECK));
         }
-        javaDollars.bet(1);
+        javaDollars.bet(BET_AMOUNT);
     }
 
     public void playersCards(){
