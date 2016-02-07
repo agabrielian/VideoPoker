@@ -28,15 +28,17 @@ public class Tester {
 
 
     public static void main(String[] args){
-        VideoPoker vp = new VideoPoker(FULLHOUSE2);
-        //vp.shuffle();
-        System.out.println(vp.printDeck());
-        vp.playersCards();
-        System.out.println("Which cards would you like to replace?");
-        Scanner entry = new Scanner(System.in);
-        vp.replace(entry.nextLine());
-        System.out.println(vp.printDeck());
-        vp.playersCards();
-        System.out.println(vp.analyze());
+        VideoPoker vp = new VideoPoker();
+        while(true) {
+            vp.shuffleAndBet();
+            System.out.println(vp.printDeck());
+            vp.playersCards();
+            System.out.println("Which cards would you like to replace?");
+            Scanner entry = new Scanner(System.in);
+            vp.replace(entry.nextLine());
+            System.out.println(vp.printDeck());
+            vp.playersCards();
+            System.out.println(vp.analyze() + "\n-----------");
+        }
     }
 }

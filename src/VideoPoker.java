@@ -6,6 +6,7 @@ import java.util.*;
 
 public class VideoPoker {
 
+    private JavaDollar javaDollars;
     private static int deck[];
     private static final String[] rank = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     private static final String[] suit = {"S", "H", "C", "D"};
@@ -14,11 +15,30 @@ public class VideoPoker {
     private static final int NUMBER_OF_SUITS = suit.length;     // = 4
     private static final int NUMBER_OF_CARDS_IN_DECK = NUMBER_OF_RANKS * NUMBER_OF_SUITS;   // = 52
 
+    private static final int ROYAL_FLUSH_PAYOUT = 250;
+    private static final int STRAIGHT_FLUSH_PAYOUT = 50;
+    private static final int FOUR_OF_A_KIND_PAYOUT = 25;
+    private static final int FULL_HOUSE_PAYOUT = 6;
+    private static final int FLUSH_PAYOUT = 5;
+    private static final int STRAIGHT_PAYOUT = 4;
+    private static final int THREE_OF_A_KIND_PAYOUT = 3;
+    private static final int TWO_PAIR_PAYOUT = 2;
+    private static final int PAIR_OF_JACKS_OR_BETTER_PAYOUT = 1;
+
     public VideoPoker(){
         deck = new int[NUMBER_OF_CARDS_IN_DECK];
         for(int i = 0; i < deck.length; i++){
             deck[i] = i;
         }
+    }
+
+    public VideoPoker(int amount){
+        deck = new int[NUMBER_OF_CARDS_IN_DECK];
+        for(int i = 0; i < deck.length; i++){
+            deck[i] = i;
+        }
+        javaDollars = new JavaDollar(amount);
+        System.out.println("Starting balance: " + javaDollars.getBalance());
     }
 
     public VideoPoker(String a){        //FOR TESTING ONLY
@@ -29,11 +49,12 @@ public class VideoPoker {
         }
     }
 
-    public void shuffle(){
+    public void shuffleAndBet(){
         Random r = new Random();
         for(int i = 0; i < deck.length; i++){
             swap(deck, i, r.nextInt(NUMBER_OF_CARDS_IN_DECK));
         }
+        javaDollars.bet(1);
     }
 
     public void playersCards(){
@@ -56,8 +77,15 @@ public class VideoPoker {
         a[second] = temp;
     }
 
-    public static String printDeck(){
-        return Arrays.toString(deck);
+    public static String printDeck(){   //FOR TESTING ONLY
+        String deckToString = "";
+        int s, r;
+        for(int i = 5; i < 10; i++){
+            s = deck[i] % NUMBER_OF_SUITS;
+            r = deck[i] / NUMBER_OF_SUITS;
+            deckToString += rank[r] + suit[s] + " ";
+        }
+        return deckToString;
     }
 
     public void replace(String entry){
@@ -101,16 +129,50 @@ public class VideoPoker {
     }
 
     public String analyze(){
-        if(royalFlush()) return "Royal Flush";
-        else if(straightFlush()) return "Straight Flush";
-        else if(fourOfAKind()) return "Four of a Kind";
-        else if(fullHouse()) return "Full House";
-        else if(flush()) return "Flush";
-        else if(aceHighStraight() || straight()) return "Straight";
-        else if(threeOfAKind()) return "Three of a Kind";
-        else if(twoPair()) return "Two Pair";
-        else if(pair()) return "Pair";
-        else return "High Card";
+        if(royalFlush()){
+            javaDollars.win(ROYAL_FLUSH_PAYOUT);
+            return "Royal Flush, you win " + ROYAL_FLUSH_PAYOUT;
+        }
+        else if(straightFlush()){
+            javaDollars.win(STRAIGHT_FLUSH_PAYOUT);
+            return "Straight Flush, you win " + STRAIGHT_FLUSH_PAYOUT;
+        }
+        else if(fourOfAKind()){
+            javaDollars.win(FOUR_OF_A_KIND_PAYOUT);
+            return "Four of a Kind, you win " + FOUR_OF_A_KIND_PAYOUT;
+        }
+        else if(fullHouse()){
+            javaDollars.win(FULL_HOUSE_PAYOUT);
+            return "Full House, you win " + FULL_HOUSE_PAYOUT;
+        }
+        else if(flush()){
+            javaDollars.win(FLUSH_PAYOUT);
+            return "Flush, you win " + FLUSH_PAYOUT;
+        }
+        else if(aceHighStraight() || straight()){
+            javaDollars.win(STRAIGHT_PAYOUT);
+            return "Straight, you win " + STRAIGHT_PAYOUT;
+        }
+        else if(threeOfAKind()){
+            javaDollars.win(THREE_OF_A_KIND_PAYOUT);
+            return "Three of a Kind, you win " + THREE_OF_A_KIND_PAYOUT;
+        }
+        else if(twoPair()){
+            javaDollars.win(TWO_PAIR_PAYOUT);
+            return "Two Pair, you win " + TWO_PAIR_PAYOUT;
+        }
+        else if(pairOfJacksOrBetter()){
+            javaDollars.win(PAIR_OF_JACKS_OR_BETTER_PAYOUT);
+            return "Pair of Jacks or better, you win " + PAIR_OF_JACKS_OR_BETTER_PAYOUT;
+        }
+        else if(pair()){
+            return "Pair, no win";
+        }
+        else return "High Card, no win";
+    }
+
+    public int balance(){
+        return javaDollars.getBalance();
     }
 
     private static boolean royalFlush(){
@@ -156,6 +218,15 @@ public class VideoPoker {
     private static boolean pair(){
         for(int i = 0; i < NUMBER_OF_CARDS_AT_PLAY - 1; i++)
             if(deck[i] / 4 == deck[i + 1] / 4) return true;
+        return false;
+    }
+
+    private static boolean pairOfJacksOrBetter(){
+        for(int i = 0; i < NUMBER_OF_CARDS_AT_PLAY - 1; i++)
+            if(deck[i] / 4 == deck[i + 1] / 4 && (deck[i] / 4 == 0 || deck[i] / 4 >= 10)){
+                //System.out.println("\n" + deck[i] + ", " + deck[i+1] + "\n");
+                return true;
+            }
         return false;
     }
 
